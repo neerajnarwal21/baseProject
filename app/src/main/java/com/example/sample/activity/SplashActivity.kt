@@ -30,20 +30,20 @@ class SplashActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
-        val mNotificationManager = this.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        mNotificationManager.cancelAll()
-        createNotificationChannel()
-        log("Token >>>> Start app")
-        if (initFCM())
-            Handler().postDelayed({
-                log("Token >>>> After 2 sec checking token")
-                if (!isFinishing && store.getString(Const.DEVICE_TOKEN) != null)
-                    gotoMainActivity()
-                else {
-                    registerForTokenCallback()
-                    waitFor5SecMore()
-                }
-            }, 2000)
+//        val mNotificationManager = this.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+//        mNotificationManager.cancelAll()
+//        createNotificationChannel()
+//        log("Token >>>> Start app")
+//        if (initFCM())
+//            Handler().postDelayed({
+//                log("Token >>>> After 2 sec checking token")
+//                if (!isFinishing && store.getString(Const.DEVICE_TOKEN) != null)
+//                    gotoMainActivity()
+//                else {
+//                    registerForTokenCallback()
+//                    waitFor5SecMore()
+//                }
+//            }, 2000)
     }
 
     private fun showDialogNoServices() {

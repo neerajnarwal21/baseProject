@@ -4,7 +4,7 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-public class NetworkUtil {
+public class NetworkUtils {
 
     public static int TYPE_WIFI = 1;
     public static int TYPE_MOBILE = 2;
@@ -36,11 +36,11 @@ public class NetworkUtil {
     }
 
     public static String getConnectivityStatusString(Context context) {
-        int conn = NetworkUtil.getConnectivityStatus(context);
+        int conn = NetworkUtils.getConnectivityStatus(context);
         String status = null;
-         if (conn == NetworkUtil.TYPE_NOT_CONNECTED) {
+         if (conn == NetworkUtils.TYPE_NOT_CONNECTED) {
             status = "Not connected to Internet";
-        } else if (conn == NetworkUtil.TYPE_IS_CONNECTING) {
+        } else if (conn == NetworkUtils.TYPE_IS_CONNECTING) {
             status = "Poor internet connection";
         }
         return status;

@@ -1,13 +1,8 @@
 package com.example.sample.activity;
 
 import android.annotation.TargetApi;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.net.ConnectivityManager;
-import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -63,23 +58,21 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
     ApiManager apiManager;
     @Inject
     ApiClient apiClient;
+
     public ApiInterface apiInterface;
     private Toast toast;
     public Picasso picasso;
-    private NetworksBroadcast networksBroadcast;
-    private AlertDialog networkAlertDialog;
-    private AlertDialog.Builder networkDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ((BaseApp) getApplication()).getInjection().activityModule(new ActivityModule(this)).build().inject(this);
-        initializeNetworkBroadcast();
+//        NetworkUtil.INSTANCE.init(this);
+        new NetworkUtil(this).init();
         createPicassoDownloader();
         strictModeThread();
         apiInterface = apiClient.getClient().create(ApiInterface.class);
         toast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
-        networkDialog = new AlertDialog.Builder(this);
 //        checkDate();
     }
 
@@ -104,26 +97,6 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
         picasso = new Picasso.Builder(this)
                 .downloader(new OkHttpDownloader(okHttpClient))
                 .build();
-    }
-
-    private void initializeNetworkBroadcast() {
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
-        intentFilter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
-        networksBroadcast = new NetworksBroadcast();
-        registerReceiver(networksBroadcast, intentFilter);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        try {
-            if (networksBroadcast != null) {
-                unregisterReceiver(networksBroadcast);
-            }
-        } catch (IllegalArgumentException e) {
-            networksBroadcast = null;
-        }
     }
 
     @Override
@@ -163,37 +136,6 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
         builder.create().show();
-    }
-
-    public class NetworksBroadcast extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            int status = NetworkUtil.getConnectivityStatus(context);
-            if (status == NetworkUtil.TYPE_NOT_CONNECTED) {
-                if (networkAlertDialog == null)
-                    showNoNetworkDialog("Not connected to internet");
-            } else {
-                if (networkAlertDialog != null && networkAlertDialog.isShowing())
-                    networkAlertDialog.dismiss();
-            }
-        }
-    }
-
-    private void showNoNetworkDialog(String status) {
-        networkDialog.setTitle(getString(R.string.netwrk_status));
-        networkDialog.setMessage(status);
-        networkDialog.setPositiveButton(getString(R.string.retry), null);
-        networkDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-                networkAlertDialog = null;
-                initializeNetworkBroadcast();
-            }
-        });
-        networkDialog.setCancelable(false);
-        networkAlertDialog = networkDialog.create();
-        if (!networkAlertDialog.isShowing())
-            networkAlertDialog.show();
     }
 
     protected void checkDate() {
@@ -261,7 +203,6 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
         debugLog("BaseActivity", string);
     }
 
-
     public void showExit() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(getString(R.string.are_you_sure_want_to_exit))
@@ -282,9 +223,9 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
 
     public void showToast(String msg, boolean isError) {
         View view = View.inflate(this, R.layout.layout_toast, null);
-        TextView toastTV = (TextView) view.findViewById(R.id.toastTV);
+        TextView toastTV = view.findViewById(R.id.toastTV);
         if (isError) {
-            LinearLayout parentLL = (LinearLayout) view.findViewById(R.id.parentLL);
+            LinearLayout parentLL = view.findViewById(R.id.parentLL);
             parentLL.setBackgroundColor(ContextCompat.getColor(this, R.color.Black));
         }
         toastTV.setText(msg);

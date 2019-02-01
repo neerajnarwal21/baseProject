@@ -9,6 +9,7 @@ import android.graphics.drawable.ColorDrawable
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
+import android.net.ConnectivityManager
 import android.os.Build
 import android.os.Parcel
 import android.os.Parcelable
@@ -142,6 +143,12 @@ fun getAddress(lat: Double, lng: Double, context: Context): String {
         return ""
     }
 
+}
+
+fun isNetworkAvailable(context: Context): Boolean {
+    val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    val networkInfo = cm.getActiveNetworkInfo()
+    return networkInfo != null && networkInfo.isConnected()
 }
 
 fun debugLog(tag: String, s: String) {

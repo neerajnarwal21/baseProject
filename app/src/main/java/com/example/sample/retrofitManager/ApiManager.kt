@@ -3,6 +3,7 @@ package com.example.sample.retrofitManager
 import android.content.Context
 import android.util.MalformedJsonException
 import com.example.sample.utils.Const
+import com.example.sample.utils.Const.ErrorCodes.*
 import com.example.sample.utils.debugLog
 import com.google.gson.Gson
 import com.google.gson.JsonObject
@@ -141,13 +142,13 @@ class ApiManager(val context: Context, val progressDialog: ProgressDialog) {
         try {
             when (t.javaClass) {
                 SocketTimeoutException::class.java ->
-                    responseListener?.onError(call, Const.ErrorCodes.SOCKET_TIMEOUT, "Request Timeout", responseListener)
+                    responseListener?.onError(call, SOCKET_TIMEOUT, "Request Timeout", responseListener)
                 MalformedJsonException::class.java ->
-                    responseListener?.onError(call, Const.ErrorCodes.SERVER_ERROR, "Internal server error", responseListener)
+                    responseListener?.onError(call, SERVER_ERROR, "Internal server error", responseListener)
                 UnknownHostException::class.java ->
-                    responseListener?.onError(call, Const.ErrorCodes.NO_INTERNET, "No Network", responseListener)
+                    responseListener?.onError(call, NO_INTERNET, "No Network", responseListener)
                 else ->
-                    responseListener?.onError(call, Const.ErrorCodes.SERVER_ERROR, t.localizedMessage, responseListener)
+                    responseListener?.onError(call, SERVER_ERROR, t.localizedMessage, responseListener)
             }
         } catch (ignored: Exception) {
         }

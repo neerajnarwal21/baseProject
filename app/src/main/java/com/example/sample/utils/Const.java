@@ -2,7 +2,7 @@ package com.example.sample.utils;
 
 public class Const {
 
-    public static final String SERVER_REMOTE_URL = "";
+    public static final String SERVER_REMOTE_URL = "http://www.google.com/";
     public static final String DISPLAY_MESSAGE_ACTION = "com.packagename.DISPLAY_MESSAGE";
     public static final int PLAY_SERVICES_RESOLUTION_REQUEST = 1234;
     public static final String NOTI_CHANNEL_ID = "my_custom_channel";

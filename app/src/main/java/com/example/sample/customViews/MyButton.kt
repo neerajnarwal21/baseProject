@@ -26,5 +26,5 @@ class MyButton : android.support.v7.widget.AppCompatButton {
         includeFontPadding = false
     }
 
-    private fun getFont() = Typeface.createFromAsset(context.assets, "fonts/myriad.ttf")
+    private fun getFont() = Typeface.createFromAsset(context.assets, "fonts/myriad.otf")
 }

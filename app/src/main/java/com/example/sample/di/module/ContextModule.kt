@@ -1,6 +1,8 @@
 package com.example.sample.di.module
 
 import android.content.Context
+import com.example.sample.utils.NetworkUtil
+import com.example.sample.utils.PrefStore
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
